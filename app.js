@@ -15,6 +15,7 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const { errorHandler, notFoundHandler, asyncHandler } = require("./utils/errorHandler.js");
 const ExpressError = require("./utils/ExpressError.js");
@@ -81,16 +82,20 @@ app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-// Session configuration (must be before passport.session)
+// Session configuration – store in MongoDB so sign-in/logout work on Render (persistent across restarts)
 const sessionConfig = {
     secret: process.env.SESSION_SECRET || "a-very-secure-secret-change-this",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: MONGODB_URI,
+        touchAfter: 24 * 3600
+    }),
     cookie: {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24, // 1 day
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax"
+        sameSite: "lax"
     }
 };
 app.use(session(sessionConfig));

@@ -33,10 +33,22 @@ Your app is live at **https://planmystay1.onrender.com/**. A **400 error** after
 5. Replace `<password>` with your database user password.
 6. Paste this as **MONGODB_URI** in Render Environment (Step 1).
 
-Example:
+Example (replace `USER`, `PASSWORD`, and cluster host with your Atlas values):
 ```text
-mongodb+srv://myuser:mypass@cluster0.xxxxx.mongodb.net/planmystay?retryWrites=true&w=majority
+mongodb+srv://USER:PASSWORD@cluster0.xxxxx.mongodb.net/planmystay?retryWrites=true&w=majority
 ```
+**Important:** Include the database name `/planmystay` before the `?` so the app uses the correct database.
+
+---
+
+## Sign-in and logout on Render
+
+Sessions are now stored in **MongoDB** (via `connect-mongo`), not in memory. So:
+
+- **MONGODB_URI** and **SESSION_SECRET** must both be set on Render.
+- Login and logout will persist across deploys and restarts.
+
+If sign-in or logout still fails, check that **SESSION_SECRET** is set and that **MONGODB_URI** is correct (same Atlas cluster and database).
 
 ---
 
