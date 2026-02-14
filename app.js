@@ -110,7 +110,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // Make user, flash messages, and env-derived values available in all templates
 app.use((req, res, next) => {
-    res.locals.currentUser = req.user;
+    res.locals.currentUser = req.user || null; // always set so layout/includes never see "currentUser is not defined"
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.MAP_TOKEN = process.env.MAP_TOKEN || "";

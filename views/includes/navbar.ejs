@@ -32,7 +32,8 @@
             <a class="nav-link" target="_blank" href="<%= listing.media.facebook %>"><i class="fab fa-facebook"></i></a>
           <% } %>
         <% } %>
-        <% if(!currentUser){ %>
+        <% var isLoggedIn = typeof currentUser !== 'undefined' && currentUser; %>
+        <% if(!isLoggedIn){ %>
           <a class="nav-link" href="/users/signup">Sign Up</a>
           <a class="nav-link" href="/users/login">Login</a>
         <% } else { %>

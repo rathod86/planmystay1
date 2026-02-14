@@ -16,7 +16,7 @@
                             From cozy beachfront cottages to luxury mountain retreats, find your perfect getaway.
                         </p>
                         <div class="hero-buttons">
-                            <% if(!currentUser){ %>
+                            <% if(typeof currentUser === 'undefined' || !currentUser){ %>
                                 <button onclick="scrollToSection('features')" class="btn btn-primary btn-lg me-3 hero-btn">
                                     <i class="fas fa-rocket me-2"></i>Get Started
                                 </button>
@@ -176,7 +176,7 @@
             <div class="col-12 text-center">
                 <h2 class="cta-title">Ready to Start Your Journey?</h2>
                 <p class="cta-subtitle">Join thousands of travelers who have found their perfect getaway with PlanMyStay</p>
-                <% if(!currentUser){ %>
+                <% if(typeof currentUser === 'undefined' || !currentUser){ %>
                     <div class="cta-buttons">
                         <button onclick="window.location.href='/users/signup'" class="btn btn-primary btn-lg me-3 cta-btn">
                             <i class="fas fa-rocket me-2"></i>Sign Up Now
