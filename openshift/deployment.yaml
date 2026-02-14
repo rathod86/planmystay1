@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: h-project
+  labels:
+    app: h-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: h-project
+  template:
+    metadata:
+      labels:
+        app: h-project
+    spec:
+      containers:
+        - name: h-project
+          image: h-project:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: h-project-config
+            - secretRef:
+                name: h-project-secret
+                optional: true
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: h-project-config
+  labels:
+    app: h-project
+data:
+  NODE_ENV: "production"
+  PORT: "8080"
