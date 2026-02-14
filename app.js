@@ -1,8 +1,9 @@
-if (process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
-}
+// Load .env when file exists (local dev). On Render, set env vars in Dashboard.
+require('dotenv').config();
 
-console.log("Environment Variables:", process.env.SECRET);
+if (process.env.NODE_ENV !== "production") {
+    console.log("Environment loaded (development)");
+}
 
 
 const express =require('express');
@@ -70,6 +71,9 @@ main()
 
 
 
+// Trust proxy (required for Render/Heroku so req.secure and cookies work behind HTTPS)
+app.set("trust proxy", 1);
+
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true})); // to parse form data
@@ -84,7 +88,9 @@ const sessionConfig = {
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 // 1 day
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax"
     }
 };
 app.use(session(sessionConfig));
@@ -97,11 +103,12 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// Make user and flash messages available in all templates
+// Make user, flash messages, and env-derived values available in all templates
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.MAP_TOKEN = process.env.MAP_TOKEN || "";
     next();
 });
 

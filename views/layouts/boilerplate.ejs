@@ -16,8 +16,8 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.js"></script>
 <script>
-  // Make Mapbox token available on all pages
-  window.MAP_TOKEN = "<%= process.env.MAP_TOKEN %>";
+  // Make Mapbox token available on all pages (set in Render Dashboard or .env)
+  window.MAP_TOKEN = "<%= typeof MAP_TOKEN !== 'undefined' ? MAP_TOKEN : '' %>";
 </script>
 
 </head>
